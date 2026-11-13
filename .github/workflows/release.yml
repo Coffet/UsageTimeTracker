@@ -1,0 +1,73 @@
+name: Draft release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            package: windows-x64
+          - os: macos-15-intel
+            package: macos-x64
+          - os: macos-15
+            package: macos-arm64
+          - os: ubuntu-latest
+            package: linux-x64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Install Linux packaging tools
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y fakeroot rpm x11-utils
+      - name: Install WiX
+        if: runner.os == 'Windows'
+        run: choco install wixtoolset --version=3.14.1 --no-progress
+      - name: Build Windows installer
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: .\scripts\package.ps1
+      - name: Build macOS and Linux packages
+        if: runner.os != 'Windows'
+        shell: bash
+        run: ./scripts/package.sh
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: packages-${{ matrix.package }}
+          path: target/dist/*
+          if-no-files-found: error
+
+  publish-draft:
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          path: release-assets
+          merge-multiple: true
+      - name: Generate package checksums
+        working-directory: release-assets
+        run: sha256sum * > SHA256SUMS
+      - name: Create draft and attach installers
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$TAG" release-assets/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$TAG" \
+            --generate-notes \
+            --draft

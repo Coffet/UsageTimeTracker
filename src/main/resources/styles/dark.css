@@ -1,0 +1,24 @@
+.root {
+    -fx-app-bg: #1c2729;
+    -fx-surface: #243234;
+    -fx-surface-alt: #2f4142;
+    -fx-border: #536564;
+    -fx-text: #eef2ea;
+    -fx-muted: #b1c2bc;
+    -fx-brand: #e0a28e;
+    -fx-brand-text: #2d211f;
+    -fx-hover: #3b5050;
+    -fx-danger: #e8a08d;
+    -fx-danger-bg: #35251f;
+    -fx-chart-0: #dfa184;
+    -fx-chart-1: #96b4ba;
+    -fx-chart-2: #c3b987;
+    -fx-chart-3: #c0a3b8;
+    -fx-chart-4: #dfbd80;
+    -fx-chart-5: #8dbab0;
+    -fx-heat-0: #2f4142;
+    -fx-heat-1: #3d5957;
+    -fx-heat-2: #577c76;
+    -fx-heat-3: #77a49a;
+    -fx-heat-4: #a8cfc0;
+}

@@ -1,0 +1,24 @@
+.root {
+    -fx-app-bg: #f2f4f2;
+    -fx-surface: #fbfcf9;
+    -fx-surface-alt: #e5ebea;
+    -fx-border: #cdd8d6;
+    -fx-text: #253639;
+    -fx-muted: #5b6d6c;
+    -fx-brand: #a4503e;
+    -fx-brand-text: #fffaf6;
+    -fx-hover: #dce5e3;
+    -fx-danger: #9c4a3e;
+    -fx-danger-bg: #f7e9e4;
+    -fx-chart-0: #a35338;
+    -fx-chart-1: #426e78;
+    -fx-chart-2: #7a8058;
+    -fx-chart-3: #806b82;
+    -fx-chart-4: #b1874b;
+    -fx-chart-5: #56817a;
+    -fx-heat-0: #e5ebea;
+    -fx-heat-1: #ccddda;
+    -fx-heat-2: #a7c7c1;
+    -fx-heat-3: #75a59d;
+    -fx-heat-4: #4a817a;
+}
