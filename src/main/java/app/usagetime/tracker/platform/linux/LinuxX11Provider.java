@@ -50,14 +50,16 @@ public final class LinuxX11Provider implements ForegroundProvider {
         }
         Path executable = Path.of("/proc", Integer.toString(pid), "exe");
         String command = Files.exists(executable) ? Files.readSymbolicLink(executable).toString() : "Process " + pid;
-        String name = Path.of(command).getFileName().toString();
-        if (LOCK_SCREENS.contains(name.toLowerCase(Locale.ROOT))) {
+        DetectedApp app = detectedApp(command);
+        if (LOCK_SCREENS.contains(app.name().toLowerCase(Locale.ROOT))) {
             return new ForegroundSample(null, idleMillis());
         }
-        return new ForegroundSample(
-                new DetectedApp(command.toLowerCase(Locale.ROOT), name),
-                idleMillis()
-        );
+        return new ForegroundSample(app, idleMillis());
+    }
+
+    static DetectedApp detectedApp(String command) {
+        String name = Path.of(command).getFileName().toString();
+        return new DetectedApp(command, name);
     }
 
     @Override
