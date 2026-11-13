@@ -25,16 +25,23 @@ RUNTIME_OPTIONS=(
 )
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
+  mac_app_version="$VERSION"
+  if [[ "$VERSION" =~ ^0\.[0-9]+\.[0-9]+$ ]]; then
+    mac_app_version="1.0.0"
+  fi
   "$JPACKAGE" \
     --input target/package \
     --dest target/app-image \
     --name UsageTimeTracker \
-    --app-version "$VERSION" \
+    --app-version "$mac_app_version" \
     --vendor "UsageTime Tracker" \
     --main-jar "usage-time-tracker-$VERSION.jar" \
     --main-class app.usagetime.tracker.AppLauncher \
     "${RUNTIME_OPTIONS[@]}" \
     --type app-image
+  /usr/libexec/PlistBuddy \
+    -c "Set :CFBundleShortVersionString $VERSION" \
+    target/app-image/UsageTimeTracker.app/Contents/Info.plist
   case "$(uname -m)" in
     arm64) mac_arch="arm64" ;;
     x86_64) mac_arch="x86_64" ;;
