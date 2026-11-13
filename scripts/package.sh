@@ -27,20 +27,24 @@ RUNTIME_OPTIONS=(
 if [[ "$(uname -s)" == "Darwin" ]]; then
   "$JPACKAGE" \
     --input target/package \
-    --dest target/dist \
+    --dest target/app-image \
     --name UsageTimeTracker \
     --app-version "$VERSION" \
     --vendor "UsageTime Tracker" \
     --main-jar "usage-time-tracker-$VERSION.jar" \
     --main-class app.usagetime.tracker.AppLauncher \
     "${RUNTIME_OPTIONS[@]}" \
-    --type dmg
+    --type app-image
   case "$(uname -m)" in
     arm64) mac_arch="arm64" ;;
     x86_64) mac_arch="x86_64" ;;
     *) echo "Unsupported macOS architecture: $(uname -m)" >&2; exit 1 ;;
   esac
-  mv "target/dist/UsageTimeTracker-$VERSION.dmg" \
+  hdiutil create \
+    -volname "UsageTime Tracker" \
+    -srcfolder target/app-image/UsageTimeTracker.app \
+    -ov \
+    -format UDZO \
     "target/dist/UsageTimeTracker-$VERSION-macos-$mac_arch.dmg"
 elif [[ "$(uname -s)" == "Linux" ]]; then
   for package_type in deb rpm; do
