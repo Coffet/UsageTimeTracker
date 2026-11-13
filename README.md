@@ -140,6 +140,7 @@ All packages use the same application code, a trimmed, compressed Java runtime, 
 - Pull requests and pushes run the JUnit suite on Windows, macOS, and Linux.
 - Pushing a `v*` tag runs tests and builds OS-native packages on native GitHub-hosted runners, then creates a draft GitHub Release with the artifacts.
 - The draft includes SHA-256 checksums for downloaded installers.
+- Draft release notes summarize the features, platform requirements, and unsigned-package status.
 - Before public distribution, configure signing/notarization credentials as protected GitHub Actions secrets and add the corresponding signing steps to the release workflow. The workflow never receives signing secrets on pull requests.
 - Use a protected release environment and require maintainers to review/promote the draft. Third-party GitHub Actions are pinned to commits; the AppImage packaging binary is SHA-256 verified. Do not publish unsigned builds as trusted releases.
 
