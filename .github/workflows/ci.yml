@@ -22,5 +22,9 @@ jobs:
           distribution: temurin
           java-version: '17'
           cache: maven
-      - name: Run unit and integration tests
-        run: mvn --batch-mode --no-transfer-progress verify
+      - name: Run unit and integration tests (Windows)
+        if: runner.os == 'Windows'
+        run: .\mvnw.cmd --batch-mode --no-transfer-progress verify
+      - name: Run unit and integration tests (macOS and Linux)
+        if: runner.os != 'Windows'
+        run: sh ./mvnw --batch-mode --no-transfer-progress verify

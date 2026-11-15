@@ -108,7 +108,12 @@
 
 .timeline-strip { -fx-background-color: -fx-surface-alt; -fx-background-radius: 5; }
 .timeline-block { -fx-background-radius: 2; }
-.timeline-tick, .heatmap-axis, .heatmap-total { -fx-font-size: 10px; -fx-text-fill: -fx-muted; }
+.timeline-tick, .heatmap-axis, .heatmap-heading { -fx-font-size: 10px; -fx-text-fill: -fx-muted; }
+.heatmap-heading { -fx-font-weight: bold; -fx-padding: 0 0 4 0; }
+.heatmap-axis { -fx-padding: 0 0 4 0; }
+.heatmap-day, .heatmap-total { -fx-font-size: 11px; -fx-text-fill: -fx-muted; }
+.heatmap-day-today { -fx-font-weight: bold; -fx-text-fill: -fx-text; }
+.heatmap-total { -fx-text-fill: -fx-text; }
 .legend-swatch { -fx-min-width: 9; -fx-min-height: 9; -fx-max-width: 9; -fx-max-height: 9; -fx-background-radius: 3; }
 .block-color-0 { -fx-background-color: -fx-chart-0; }
 .block-color-1 { -fx-background-color: -fx-chart-1; }
@@ -116,7 +121,8 @@
 .block-color-3 { -fx-background-color: -fx-chart-3; }
 .block-color-4 { -fx-background-color: -fx-chart-4; }
 .block-color-5 { -fx-background-color: -fx-chart-5; }
-.heat-cell { -fx-background-radius: 3; }
+.heat-cell { -fx-background-radius: 2; }
+.heat-cell:hover { -fx-border-color: -fx-brand; -fx-border-width: 1; -fx-border-radius: 2; }
 .heat-0 { -fx-background-color: -fx-heat-0; }
 .heat-1 { -fx-background-color: -fx-heat-1; }
 .heat-2 { -fx-background-color: -fx-heat-2; }

@@ -22,6 +22,17 @@ class TrackingEngineTest {
     Path directory;
 
     @Test
+    void manualPausePublishesConciseStatus() {
+        try (UsageRepository repository = new SqliteUsageRepository(directory.resolve("pause.db"))) {
+            TrackingEngine engine = new TrackingEngine(
+                    new NoopProvider(), repository, Clock.systemUTC(), ignored -> { }, () -> { });
+            engine.setPaused(true);
+            assertEquals("Tracking is paused.", engine.status());
+            engine.close();
+        }
+    }
+
+    @Test
     void endsSessionAtIdleThresholdRatherThanAtTheNextPoll() {
         try (UsageRepository repository = new SqliteUsageRepository(directory.resolve("usage.db"))) {
             TrackingEngine engine = new TrackingEngine(

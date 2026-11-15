@@ -34,12 +34,14 @@ The Overview shows a live local clock, the selected period's total, a daily time
 
 ## Run from source
 
-Requirements: JDK 17 and Maven 3.9+. Java 17 is the source, CI, and release target. Java 21 is not currently used; the project can be upgraded if you decide to later.
+Requirements: JDK 17 and an internet connection for the first build. The Maven wrapper downloads the project's Maven version automatically. Java 17 is the source, CI, and release target. Java 21 is not currently used; the project can be upgraded if you decide to later.
 
 ```powershell
-mvn test
-mvn javafx:run
+.\mvnw.cmd test
+.\mvnw.cmd javafx:run
 ```
+
+On macOS or Linux, use `sh ./mvnw test` and `sh ./mvnw javafx:run` instead.
 
 On Linux X11, install `x11-utils` and `xprintidle`. The database can be deleted from the Settings page's displayed location after quitting the app. CSV and versioned JSON exports are explicit user-initiated file saves.
 
@@ -83,15 +85,15 @@ scripts/                    native packaging helpers
 
 ## Build and package
 
-Build on the **target OS and architecture** using JDK 17 and Maven 3.9+. The scripts run tests and write packages to `target/dist`. They run `mvn clean`, which deletes the entire `target` directory, including previous installers: copy any files you want to keep elsewhere first.
+Build on the **target OS and architecture** using JDK 17 and the Maven wrapper. The scripts run tests and write packages to `target/dist`. They run `clean`, which deletes the entire `target` directory, including previous installers: copy any files you want to keep elsewhere first.
 
 ### Windows: EXE, MSI, and portable ZIP
 
-Install JDK 17, Maven 3.9+, and [WiX 3.14](https://github.com/wixtoolset/wix3/releases/tag/wix3141rtm). Add the JDK, Maven, and WiX `bin` directories to `PATH`. From the project directory in PowerShell:
+Install JDK 17 and [WiX 3.14](https://github.com/wixtoolset/wix3/releases/tag/wix3141rtm). Add the JDK and WiX `bin` directories to `PATH`. From the project directory in PowerShell:
 
 ```powershell
 java -version
-mvn -version
+.\mvnw.cmd -version
 jpackage --version
 Get-Command candle, light
 .\scripts\package.ps1
@@ -101,11 +103,11 @@ The EXE and MSI offer an installation-folder chooser. The ZIP is a portable appl
 
 ### macOS: DMG
 
-Install a native JDK 17 and Maven 3.9+. Build separately on an Intel Mac and an Apple Silicon Mac to produce both DMGs. From the project directory in Terminal:
+Install a native JDK 17. Build separately on an Intel Mac and an Apple Silicon Mac to produce both DMGs. From the project directory in Terminal:
 
 ```sh
 java -version
-mvn -version
+sh ./mvnw -version
 export JAVA_HOME="$(java -XshowSettings:properties -version 2>&1 | sed -n 's/^[[:space:]]*java\.home = //p')"
 cd scripts
 bash package.sh
@@ -115,17 +117,17 @@ Copy the application from the DMG to a location of your choice. Signed distribut
 
 ### Linux: DEB, RPM, and AppImage
 
-Install JDK 17, Maven 3.9+, `fakeroot`, `rpm`, and `curl`. For example, on Ubuntu:
+Install JDK 17, `fakeroot`, `rpm`, and `curl`. For example, on Ubuntu:
 
 ```sh
 sudo apt install openjdk-17-jdk fakeroot rpm curl x11-utils xprintidle
 ```
 
-Install Maven 3.9+ separately if your distribution provides an older version. From the project directory:
+From the project directory:
 
 ```sh
 java -version
-mvn -version
+sh ./mvnw -version
 export JAVA_HOME="$(java -XshowSettings:properties -version 2>&1 | sed -n 's/^[[:space:]]*java\.home = //p')"
 cd scripts
 bash package.sh
@@ -151,7 +153,7 @@ The current MVP does not self-update. Release packages are unsigned until platfo
 ## Development
 
 - JDK 17 is the development, CI, and release target.
-- Run `mvn test` before submitting changes.
+- Run `.\mvnw.cmd test` on Windows or `sh ./mvnw test` on macOS/Linux before submitting changes.
 - Keep platform-specific code behind `ForegroundProvider`; unavailable tracking APIs should produce a visible limitation, never fabricated data.
 - Keep collection local and limited to the data described above.
 

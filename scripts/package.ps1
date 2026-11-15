@@ -9,7 +9,7 @@ if ($env:GITHUB_REF_NAME -and $env:GITHUB_REF_NAME -ne "v$version") {
     throw "Release tag $env:GITHUB_REF_NAME does not match project version $version."
 }
 
-& mvn --batch-mode --no-transfer-progress clean package dependency:copy-dependencies `
+& .\mvnw.cmd --batch-mode --no-transfer-progress clean package dependency:copy-dependencies `
     -DincludeScope=runtime -DoutputDirectory=target/package/lib
 if ($LASTEXITCODE -ne 0) { throw "Maven package build failed." }
 

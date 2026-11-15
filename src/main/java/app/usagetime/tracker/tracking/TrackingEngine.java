@@ -78,7 +78,7 @@ public final class TrackingEngine implements AutoCloseable {
         paused = value;
         if (paused) {
             endActive(clock.instant());
-            publish("Tracking is paused. Your existing data remains on this device.");
+            publish("Tracking is paused.");
         } else {
             publish(provider.supportDescription());
             executor.execute(this::poll);

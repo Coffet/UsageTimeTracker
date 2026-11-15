@@ -6,7 +6,7 @@
 
     <groupId>app.usagetime</groupId>
     <artifactId>usage-time-tracker</artifactId>
-    <version>0.1.2</version>
+    <version>0.1.3</version>
     <name>UsageTime Tracker</name>
     <description>A small, local-first desktop application usage tracker.</description>
 

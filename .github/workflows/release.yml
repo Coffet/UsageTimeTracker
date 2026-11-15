@@ -75,6 +75,19 @@ jobs:
 
           A local-first desktop app that tracks which application is in the foreground and how long it is used. Data stays on this device unless you explicitly export it.
 
+          EOF
+          if [ "$TAG" = "v0.1.3" ]; then
+            cat >> release-notes.md <<'EOF'
+          ### What's new in v0.1.3
+
+          - Redesigned the weekly heatmap with clearer time groupings, dates, and daily totals.
+          - Shortened the manual pause status to "Tracking is paused."
+          - Added a Maven wrapper so contributors can build without installing Maven separately.
+          - Fixed the weekly heatmap extending beyond the available width.
+
+          EOF
+          fi
+          cat >> release-notes.md <<'EOF'
           ### Features
 
           - Records foreground application names and usage sessions; pauses tracking after five minutes of inactivity.

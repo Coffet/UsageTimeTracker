@@ -12,7 +12,7 @@ if [[ -n "${GITHUB_REF_NAME:-}" && "${GITHUB_REF_NAME#v}" != "$VERSION" ]]; then
   exit 1
 fi
 
-mvn --batch-mode --no-transfer-progress clean package dependency:copy-dependencies \
+sh ./mvnw --batch-mode --no-transfer-progress clean package dependency:copy-dependencies \
   -DincludeScope=runtime -DoutputDirectory=target/package/lib
 
 mkdir -p target/package target/dist

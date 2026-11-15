@@ -340,10 +340,10 @@ public final class MainView extends BorderPane {
             entry.setAlignment(Pos.CENTER_LEFT);
             heatmapLegend.getChildren().add(entry);
         }
-        Label legendHint = new Label("minutes in the hour");
+        Label legendHint = new Label("minutes per hour");
         legendHint.getStyleClass().add("legend-hint");
         heatmapLegend.getChildren().add(legendHint);
-        VBox heatmapSection = new VBox(8,
+        VBox heatmapSection = new VBox(12,
                 new VBox(4, heatmapTitle, heatmapCaption),
                 heatmapGrid, heatmapLegend);
         heatmapSection.getStyleClass().add("journal-section");
@@ -435,8 +435,7 @@ public final class MainView extends BorderPane {
         long[][] grid = WeekHeatmap.secondsPerHour(
                 repository.sessionsBetween(weekFrom, weekTo), weekStart, zone);
         heatmapGrid.setWeek(weekStart, grid);
-        heatmapCaption.setText("Minutes in the foreground by hour - week of " + weekStart.format(DATE)
-                + ". Row ends show each day's total.");
+        heatmapCaption.setText("Week of " + weekStart.format(DATE) + " - foreground time by hour.");
 
         List<SessionRecord> recent = repository.sessionsBetween(range.startInclusive(), range.endExclusive())
                 .stream().limit(RECENT_LIMIT).toList();
