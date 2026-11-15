@@ -16,11 +16,18 @@ import java.time.Clock;
 import java.util.concurrent.atomic.AtomicReference;
 
 public final class UsageTimeTrackerApp extends Application {
+    private static final Thread.UncaughtExceptionHandler CONSOLE_EXCEPTION_HANDLER = (thread, error) -> {
+        System.err.println("Uncaught exception on thread \"" + thread.getName() + "\":");
+        error.printStackTrace(System.err);
+        System.err.flush();
+    };
+
     private UsageRepository repository;
     private TrackingEngine engine;
 
     @Override
     public void start(Stage stage) {
+        Thread.currentThread().setUncaughtExceptionHandler(CONSOLE_EXCEPTION_HANDLER);
         Path databasePath = Path.of(System.getProperty("user.home"), ".usage-time-tracker", "usage.db");
         repository = new SqliteUsageRepository(databasePath);
         AtomicReference<MainView> viewReference = new AtomicReference<>();
@@ -71,6 +78,7 @@ public final class UsageTimeTrackerApp extends Application {
     }
 
     public static void main(String[] args) {
+        Thread.setDefaultUncaughtExceptionHandler(CONSOLE_EXCEPTION_HANDLER);
         launch(args);
     }
 }
