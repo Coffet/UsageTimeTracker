@@ -56,7 +56,8 @@ public final class UsageTimeTrackerApp extends Application {
         Scene scene = new Scene(view.root(), 1120, 760);
         boolean dark = repository.setting("theme", "light").equals("dark");
         view.installStylesheet(scene, dark);
-        stage.setTitle("UsageTime Tracker");
+        String version = UsageTimeTrackerApp.class.getPackage().getImplementationVersion();
+        stage.setTitle(version == null ? "UsageTime Tracker" : "UsageTime Tracker " + version);
         stage.setMinWidth(840);
         stage.setMinHeight(600);
         stage.setScene(scene);
