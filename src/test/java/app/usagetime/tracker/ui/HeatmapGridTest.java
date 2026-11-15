@@ -5,10 +5,27 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HeatmapGridTest {
+    @Test
+    void hoverDescriptionIncludesEachAppsTimeAndHandlesEmptyHours() {
+        LocalDate date = LocalDate.of(2026, 6, 15);
+        String description = HeatmapGrid.cellDescription(date, 10, new WeekHeatmap.Cell(95, List.of(
+                new WeekHeatmap.AppTime("editor", "Editor", 65),
+                new WeekHeatmap.AppTime("browser", "Browser", 30))));
+
+        assertTrue(description.contains("1m 35s in the foreground"));
+        assertTrue(description.contains("\nEditor - 1m 05s"));
+        assertTrue(description.contains("\nBrowser - 30s"));
+        assertTrue(HeatmapGrid.cellDescription(date, 11, new WeekHeatmap.Cell(0, List.of()))
+                .contains("no tracked time"));
+    }
+
     @Test
     void hourCellsAndDayTotalsFitWithinAvailableWidth() {
         for (double width : new double[]{600, 1000}) {

@@ -39,6 +39,23 @@ class WeekHeatmapTest {
     }
 
     @Test
+    void aggregatesEachAppsTimeWithinEachHour() {
+        LocalDate weekStart = LocalDate.of(2026, 6, 15);
+        WeekHeatmap.Cell[][] cells = WeekHeatmap.cells(List.of(
+                session("Editor", "2026-06-15T00:30:00Z", "2026-06-15T01:15:00Z"),
+                session("Editor", "2026-06-15T01:30:00Z", "2026-06-15T01:45:00Z"),
+                session("Browser", "2026-06-15T01:15:00Z", "2026-06-15T01:30:00Z")),
+                weekStart, UTC);
+
+        assertEquals(1800, cells[0][0].seconds());
+        assertEquals(List.of(new WeekHeatmap.AppTime("editor", "Editor", 1800)), cells[0][0].apps());
+        assertEquals(2700, cells[0][1].seconds());
+        assertEquals(List.of(new WeekHeatmap.AppTime("editor", "Editor", 1800),
+                new WeekHeatmap.AppTime("browser", "Browser", 900)), cells[0][1].apps());
+        assertEquals(List.of(), cells[0][2].apps());
+    }
+
+    @Test
     void clipsSessionsToTheWeekBounds() {
         LocalDate weekStart = LocalDate.of(2026, 6, 15);
         long[][] grid = WeekHeatmap.secondsPerHour(List.of(
@@ -90,6 +107,10 @@ class WeekHeatmapTest {
         assertEquals(1800, grid[6][0]);
         assertEquals(7200, grid[6][1]);
         assertEquals(1800, grid[6][2]);
+        WeekHeatmap.Cell[][] cells = WeekHeatmap.cells(List.of(
+                session("Editor", "2026-11-01T07:30:00Z", "2026-11-01T10:30:00Z")),
+                weekStart, zone);
+        assertEquals(List.of(new WeekHeatmap.AppTime("editor", "Editor", 7200)), cells[6][1].apps());
     }
 
     @Test

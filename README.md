@@ -10,7 +10,7 @@ A quiet, local-first desktop app-usage tracker. It records foreground applicatio
 - Local categories and optional daily goals
 - Idle pauses after five minutes without input
 - Daily, week-to-date, and month-to-date app and custom-category totals; a 30-day session list
-- A 24-hour time-block timeline, category breakdown, and a week-by-hour heatmap (including sub-minute activity, a minute-range legend, and per-day totals) built from recorded sessions
+- A 24-hour time-block timeline, category breakdown, and a week-by-hour heatmap with per-app hover details, sub-minute activity, a minute-range legend, and per-day totals
 - Gentle in-app focus-goal reminders and a confirmed action to delete tracked history
 
 It does **not** capture window titles, URLs, keystrokes, screenshots, document names, or send usage data to a service. Nothing is transmitted automatically. The application stores its SQLite database in `~/.usage-time-tracker/usage.db` on macOS/Linux and `%USERPROFILE%\.usage-time-tracker\usage.db` on Windows.

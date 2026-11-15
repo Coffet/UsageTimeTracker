@@ -81,7 +81,9 @@ jobs:
           ### What's new in v0.1.3
 
           - Redesigned the weekly heatmap with clearer time groupings, dates, and daily totals.
+          - Added per-app usage details when hovering over an hour.
           - Shortened the manual pause status to "Tracking is paused."
+          - Removed unnecessary space beside the status message.
           - Added a Maven wrapper so contributors can build without installing Maven separately.
           - Fixed the weekly heatmap extending beyond the available width.
 
@@ -111,8 +113,18 @@ jobs:
           - macOS may request Automation permission for foreground-app detection.
           - This is an MVP release; it has no self-updater.
           EOF
-          gh release create "$TAG" release-assets/* \
-            --repo "$GITHUB_REPOSITORY" \
-            --title "$TAG" \
-            --notes-file release-notes.md \
-            --draft
+          if [ "$TAG" = "v0.1.3" ]; then
+            is_draft="$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isDraft --jq '.isDraft')"
+            if [ "$is_draft" != "true" ]; then
+              echo "Refusing to replace a release that is not a draft." >&2
+              exit 1
+            fi
+            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TAG" --notes-file release-notes.md
+            gh release upload "$TAG" release-assets/* --repo "$GITHUB_REPOSITORY" --clobber
+          else
+            gh release create "$TAG" release-assets/* \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "$TAG" \
+              --notes-file release-notes.md \
+              --draft
+          fi

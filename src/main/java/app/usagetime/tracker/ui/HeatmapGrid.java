@@ -72,6 +72,8 @@ final class HeatmapGrid extends GridPane {
                 cell.setAccessibleRole(AccessibleRole.TEXT);
                 cells[day][hour] = cell;
                 Tooltip tooltip = new Tooltip();
+                tooltip.setWrapText(true);
+                tooltip.setMaxWidth(400);
                 tooltips[day][hour] = tooltip;
                 Tooltip.install(cell, tooltip);
                 if (hour > 0 && hour % 6 == 0) {
@@ -86,7 +88,7 @@ final class HeatmapGrid extends GridPane {
         }
     }
 
-    void setWeek(LocalDate weekStart, long[][] secondsPerHour) {
+    void setWeek(LocalDate weekStart, WeekHeatmap.Cell[][] hourlyCells) {
         this.weekStart = weekStart;
         for (int day = 0; day < WeekHeatmap.DAYS; day++) {
             long dayTotal = 0;
@@ -96,20 +98,30 @@ final class HeatmapGrid extends GridPane {
             dayLabels[day].getStyleClass().setAll("heatmap-day",
                     date.equals(LocalDate.now()) ? "heatmap-day-today" : "heatmap-day-other");
             for (int hour = 0; hour < WeekHeatmap.HOURS; hour++) {
-                long seconds = secondsPerHour[day][hour];
+                WeekHeatmap.Cell hourCell = hourlyCells[day][hour];
+                long seconds = hourCell.seconds();
                 dayTotal += seconds;
                 Region cell = cells[day][hour];
                 cell.getStyleClass().setAll("heat-cell", "heat-" + WeekHeatmap.intensityBucket(seconds));
-                String description = date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault())
-                        + " " + date.format(CELL_DATE)
-                        + ", " + hourLabel(hour) + " to " + hourLabel((hour + 1) % 24) + " - "
-                        + (seconds == 0 ? "no tracked time"
-                        : MainView.formatDuration(seconds) + " in the foreground");
+                String description = cellDescription(date, hour, hourCell);
                 cell.setAccessibleText(description);
                 tooltips[day][hour].setText(description);
             }
             dayTotals[day].setText(MainView.formatDuration(dayTotal));
         }
+    }
+
+    static String cellDescription(LocalDate date, int hour, WeekHeatmap.Cell cell) {
+        String header = date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault())
+                + " " + date.format(CELL_DATE)
+                + ", " + hourLabel(hour) + " to " + hourLabel((hour + 1) % 24) + " - "
+                + (cell.seconds() == 0 ? "no tracked time"
+                : MainView.formatDuration(cell.seconds()) + " in the foreground");
+        StringBuilder description = new StringBuilder(header);
+        for (WeekHeatmap.AppTime app : cell.apps()) {
+            description.append("\n").append(app.name()).append(" - ").append(MainView.formatDuration(app.seconds()));
+        }
+        return description.toString();
     }
 
     static void configureColumns(GridPane grid) {

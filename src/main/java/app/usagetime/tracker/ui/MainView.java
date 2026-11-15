@@ -214,7 +214,7 @@ public final class MainView extends BorderPane {
         statusDot.getStyleClass().setAll("status-dot", engine.isPaused() ? "paused" : "tracking");
         statusLabel.getStyleClass().add("status-text");
         statusLabel.setWrapText(true);
-        statusLabel.setPrefWidth(180);
+        statusLabel.setMaxWidth(180);
         statusLabel.setText(engine.status());
         HBox liveStatus = new HBox(7, statusDot, statusLabel);
         liveStatus.setAlignment(Pos.CENTER_LEFT);
@@ -432,7 +432,7 @@ public final class MainView extends BorderPane {
         LocalDate weekStart = selectedDate.minusDays(selectedDate.getDayOfWeek().getValue() - 1L);
         Instant weekFrom = weekStart.atStartOfDay(zone).toInstant();
         Instant weekTo = weekStart.plusDays(WeekHeatmap.DAYS).atStartOfDay(zone).toInstant();
-        long[][] grid = WeekHeatmap.secondsPerHour(
+        WeekHeatmap.Cell[][] grid = WeekHeatmap.cells(
                 repository.sessionsBetween(weekFrom, weekTo), weekStart, zone);
         heatmapGrid.setWeek(weekStart, grid);
         heatmapCaption.setText("Week of " + weekStart.format(DATE) + " - foreground time by hour.");
