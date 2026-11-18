@@ -20,6 +20,7 @@ cp "target/usage-time-tracker-$VERSION.jar" target/package/
 JPACKAGE="${JAVA_HOME:?Set JAVA_HOME to JDK 17}/bin/jpackage"
 "$JAVA_HOME/bin/java" scripts/TrimSqliteNatives.java target/package/lib
 RUNTIME_OPTIONS=(
+  --java-options "-XX:-UseBASE64Intrinsics"
   --add-modules "java.desktop,java.sql,java.management,java.naming,jdk.crypto.ec,jdk.jfr,jdk.localedata,jdk.unsupported"
   --jlink-options "--strip-native-commands --strip-debug --no-man-pages --no-header-files --compress=2"
 )

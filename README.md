@@ -43,6 +43,8 @@ Requirements: JDK 17 and an internet connection for the first build. The Maven w
 
 On macOS or Linux, use `sh ./mvnw test` and `sh ./mvnw javafx:run` instead.
 
+Until the JDK used to run the app includes the Java4Shell fix, disable HotSpot's Base64 intrinsic when running from source by setting `JAVA_TOOL_OPTIONS` to `-XX:-UseBASE64Intrinsics` (PowerShell: `$env:JAVA_TOOL_OPTIONS='-XX:-UseBASE64Intrinsics'`; macOS/Linux: `export JAVA_TOOL_OPTIONS=-XX:-UseBASE64Intrinsics`). The packaging scripts already add this temporary mitigation to bundled runtimes; decoding may be slower.
+
 On Linux X11, install `x11-utils` and `xprintidle`. The database can be deleted from the Settings page's displayed location after quitting the app. CSV and versioned JSON exports are explicit user-initiated file saves.
 
 ## Architecture
@@ -135,7 +137,7 @@ bash package.sh
 
 The AppImage build targets x86-64. DEB/RPM locations are controlled by the package manager; the AppImage can be placed anywhere. The DEB declares its GTK, `x11-utils`, and `xprintidle` dependencies; RPM and AppImage users must make GTK 3, `xprop`, and `xprintidle` available separately. Linux foreground tracking requires X11; Wayland is not supported.
 
-All packages use the same application code, a trimmed, compressed Java runtime, and only the SQLite native libraries needed on the build platform. Unsigned local packages are for development/testing, not public distribution.
+All packages use the same application code, a trimmed, compressed Java runtime, and only the SQLite native libraries needed on the build platform. Packaged runtimes temporarily disable HotSpot's Base64 intrinsic as a Java4Shell mitigation; decoding may be slower. Unsigned local packages are for development/testing, not public distribution.
 
 ### CI and releases
 

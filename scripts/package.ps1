@@ -27,6 +27,7 @@ $commonArgs = @(
     "--vendor", "UsageTime Tracker",
     "--main-jar", "usage-time-tracker-$version.jar",
     "--main-class", "app.usagetime.tracker.AppLauncher",
+    "--java-options", "-XX:-UseBASE64Intrinsics",
     "--add-modules", "java.desktop,java.sql,java.management,java.naming,jdk.crypto.ec,jdk.jfr,jdk.localedata,jdk.unsupported",
     "--jlink-options", "--strip-native-commands --strip-debug --no-man-pages --no-header-files --compress=2"
 )
