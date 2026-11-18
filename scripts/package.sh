@@ -27,7 +27,7 @@ RUNTIME_OPTIONS=(
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
   mac_app_version="$VERSION"
-  if [[ "$VERSION" =~ ^0\.[0-9]+\.[0-9]+$ ]]; then
+  if [[ "$VERSION" =~ ^0\. ]]; then
     mac_app_version="1.0.0"
   fi
   "$JPACKAGE" \

@@ -76,7 +76,14 @@ jobs:
           A local-first desktop app that tracks which application is in the foreground and how long it is used. Data stays on this device unless you explicitly export it.
 
           EOF
-          if [ "$TAG" = "v0.1.3" ]; then
+          if [ "$TAG" = "v0.1.3.1" ]; then
+            cat >> release-notes.md <<'EOF'
+          ### What's new in v0.1.3.1
+
+          - Temporarily disables HotSpot's Base64 intrinsic in bundled runtimes as a Java4Shell mitigation pending fixed JDK builds.
+
+          EOF
+          elif [ "$TAG" = "v0.1.3" ]; then
             cat >> release-notes.md <<'EOF'
           ### What's new in v0.1.3
 
